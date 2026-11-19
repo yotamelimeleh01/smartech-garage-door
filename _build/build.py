@@ -206,7 +206,7 @@ def offers():
 </div>"""
 
 
-def photo(r, src, alt, badge=True, ratio=None):
+def photo(r, src, alt, badge=False, ratio=None):
     style = f' style="aspect-ratio:{ratio}"' if ratio else ""
     b = (f'<span class="badge"><img src="{r}assets/smartech-icon.png" alt="">Smartech technician</span>' if badge else "")
     return f'<div class="photo"{style}><img src="{r}assets/img/{src}" alt="{e(alt)}" loading="lazy">{b}</div>'
@@ -251,7 +251,7 @@ def business_schema():
     return {
         "@context": "https://schema.org", "@type": "HomeAndConstructionBusiness", "name": BRAND,
         "url": SITE_URL + "/", "logo": SITE_URL + "/assets/smartech-logo.png",
-        "image": SITE_URL + "/assets/img/work-tuneup-1.jpg", "telephone": PHONES["orlando"]["tel"],
+        "image": SITE_URL + "/assets/img/hero-florida-home.jpg", "telephone": PHONES["orlando"]["tel"],
         "priceRange": "$$",
         "areaServed": [{"@type": "City", "name": c + ", FL"} for c in ORLANDO_CITIES + TAMPA_CITIES],
         "contactPoint": [{"@type": "ContactPoint", "telephone": p["tel"], "contactType": "customer service",
@@ -292,7 +292,7 @@ def write(path, title, desc, body, depth, noindex=False, schema=None, priority="
         SITEMAP.append((url, priority))
 
 
-def hero(r, h1, lead, crumbs=None, pill=None, img="work-tuneup-1.jpg", right=None, small=False):
+def hero(r, h1, lead, crumbs=None, pill=None, img="hero-florida-home.jpg", right=None, small=False):
     bc = ""
     if crumbs:
         bc = '<div class="breadcrumb">' + " / ".join(f'<a href="{u}">{e(t)}</a>' if u else e(t) for t, u in crumbs) + "</div>"
@@ -341,7 +341,7 @@ def build_home():
 <li><b>Real savings.</b> $69 tune-ups, $100 off any repair and $500 off new doors.</li>
 <li><b>Local to you.</b> Technicians across the Orlando and Tampa Bay areas.</li></ul>
 <a class="btn" href="{r}contact/#quote">Get a Free Quote</a></div>
-{photo(r, "work-tuneup-2.jpg", "Smartech technician servicing a garage door", ratio="4/3")}</div></section>
+{photo(r, "technician-toolbelt.jpg", "Garage door technician with tool belt and ladder", ratio="4/3")}</div></section>
 <section class="dark"><div class="wrap"><div class="section-head"><h2>How it works</h2><p class="muted">Getting your door fixed is easy.</p></div>
 <div class="steps"><div class="step"><h3>Call or request a quote</h3><p class="muted">Tell us what's wrong. It takes less than a minute.</p></div>
 <div class="step"><h3>We come to you</h3><p class="muted">A technician arrives, diagnoses the problem and gives you the price first.</p></div>
@@ -351,8 +351,8 @@ def build_home():
 <a class="tel" href="tel:{PHONES['orlando']['tel']}">{PHONES['orlando']['disp']}</a><p style="margin:10px 0 0"><a href="{r}areas/#orlando">See all Orlando-area cities &rarr;</a></p></div>
 <div class="area"><h3>Tampa Bay Area</h3><p class="muted">{e(", ".join(TAMPA_CITIES[:12]))} and nearby cities.</p>
 <a class="tel" href="tel:{PHONES['tampa']['tel']}">{PHONES['tampa']['disp']}</a><p style="margin:10px 0 0"><a href="{r}areas/#tampa-bay">See all Tampa Bay cities &rarr;</a></p></div></div></div></section>
-<section class="alt"><div class="wrap"><div class="section-head"><h2>Our Work</h2><p class="muted">Real jobs from our technicians.</p></div>
-<div class="gallery">{photo(r, "work-install-1.jpg", "Garage door installation in progress")}{photo(r, "work-repair-1.jpg", "Technicians repairing a garage door")}{photo(r, "work-tuneup-1.jpg", "Garage door tune-up and inspection")}</div></div></section>
+<section class="alt"><div class="wrap"><div class="section-head"><h2>Every Door, Every Style</h2><p class="muted">We service and install all major garage door types, from classic raised-panel to modern glass and wood-look.</p></div>
+<div class="gallery">{photo(r, "modern-glass-garage.jpg", "Modern glass garage doors")}{photo(r, "new-wood-garage-door.jpg", "Wood-look modern garage door")}{photo(r, "home-double-garage.jpg", "Home with two-car garage doors")}</div></div></section>
 <section><div class="wrap"><div class="section-head"><h2>Frequently Asked Questions</h2></div>{faq_block(HOME_FAQ)}</div></section>
 {cta(r)}"""
     write("index.html", f"{BRAND} | Orlando & Tampa Bay Garage Door Repair",
@@ -364,15 +364,15 @@ def build_services():
     r = rel(1)
     body = hero(r, "Garage Door <span>Services</span>",
                 "Everything your garage door needs, from a quick tune-up to a full replacement. Jump to a service below.",
-                crumbs=[("Home", r), ("Services", None)], small=True, img="work-repair-1.jpg")
+                crumbs=[("Home", r), ("Services", None)], small=True, img="technician-toolbelt.jpg")
     jump = "".join(f'<a class="btn blue" style="padding:9px 16px;font-size:15px" href="#{s["slug"]}">{e(s["name"])}</a>' for s in SERVICES)
     body += f'<section style="padding:28px 0"><div class="wrap" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">{jump}</div></section>'
-    imgs = ["work-repair-1.jpg", "work-install-2.jpg", "work-install-1.jpg", "work-tuneup-2.jpg", "work-tuneup-1.jpg"]
+    imgs = ["garage-spring-cable.jpg", "technician-drill.jpg", "white-garage-door.jpg", "tools.jpg", "new-wood-garage-door.jpg"]
     all_faq = []
     for i, s in enumerate(SERVICES):
         cls = "alt" if i % 2 == 0 else ""
         content = s["body"].replace("<h2>", "<h3>").replace("</h2>", "</h3>")
-        pic = photo(r, imgs[i], f"Smartech technician: {s['name'].lower()}", ratio="4/3")
+        pic = photo(r, imgs[i], s['name'], ratio="4/3")
         body += f"""<section class="{cls}" id="{s['slug']}" style="scroll-margin-top:80px"><div class="wrap split" style="align-items:start">
 <div><span class="pill">{s['icon']} {e(s['name'].upper())}</span><h2>{e(s['title'].split(' | ')[0])}</h2><p class="lead" style="font-size:19px">{s['lead']}</p>{content}
 <a class="btn" href="#quote">Get a Free Quote</a></div><div>{pic}</div></div></section>"""
@@ -389,7 +389,7 @@ def build_areas():
     r = rel(1)
     body = hero(r, "Service <span>Areas</span>",
                 "Smartech technicians cover two regions of Florida. Find your city below and call the number for your area for the fastest service.",
-                crumbs=[("Home", r), ("Service Areas", None)], small=True, img="work-install-2.jpg")
+                crumbs=[("Home", r), ("Service Areas", None)], small=True, img="florida-home-garage.jpg")
     for i, (slug, key, name, cities, blurb) in enumerate([
         ("orlando", "orlando", "Orlando Area", ORLANDO_CITIES,
          "From Orlando and Kissimmee out to the Space Coast, Volusia County and Ocala, our Orlando-area team handles springs, openers, cables, tune-ups and new doors."),
@@ -419,11 +419,11 @@ def build_simple_pages():
 <section class="alt"><div class="wrap split"><div><h2>What happens next</h2><ul class="tick">
 <li>We call you back, usually within minutes during business hours</li><li>We ask a few questions about the problem and set a time</li>
 <li>A technician arrives, diagnoses the door and gives you the price before starting</li></ul></div>
-{photo(r, "work-install-1.jpg", "Smartech technicians at work", ratio="4/3")}</div></section>"""
+{photo(r, "home-double-garage.jpg", "Home with garage doors", ratio="4/3")}</div></section>"""
     write("contact/index.html", f"Contact & Free Quote | {BRAND}",
           "Request a free garage door quote or call Smartech in Orlando (407) 553-9087 or Tampa Bay (813) 519-5168.", body, 1, priority="0.8")
 
-    body = f"""<section class="hero page-hero" style="background-image:url({r}assets/img/work-tuneup-1.jpg)"><div class="wrap">
+    body = f"""<section class="hero page-hero" style="background-image:url({r}assets/img/hero-florida-home.jpg)"><div class="wrap">
 <span class="pill blue">REQUEST RECEIVED</span><h1>Thanks! We'll call you <span>in a few minutes.</span></h1>
 <p class="lead">A Smartech team member will call you shortly to confirm your appointment. Need help right now? Call us:</p>
 <div class="calls">{tel_btn("orlando")}{tel_btn("tampa", "btn blue")}</div></div></section>"""
@@ -448,7 +448,7 @@ def build_privacy():
 
 def build_404():
     # GitHub Pages serves this for any missing path, so links must be absolute from the site root.
-    body = f"""<section class="hero page-hero" style="background-image:url(/assets/img/work-tuneup-1.jpg)"><div class="wrap">
+    body = f"""<section class="hero page-hero" style="background-image:url(/assets/img/hero-florida-home.jpg)"><div class="wrap">
 <h1>Page not <span>found</span></h1><p class="lead">The page you're looking for doesn't exist. Head back home or call us.</p>
 <div class="calls"><a class="btn ghost" href="/">Back to home</a>{tel_btn("orlando")}{tel_btn("tampa", "btn blue")}</div></div></section>"""
     write("404.html", f"Page Not Found | {BRAND}", "Page not found.", body, 0, noindex=True)
